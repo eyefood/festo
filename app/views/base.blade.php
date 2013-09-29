@@ -13,6 +13,10 @@
 	@show
 	
 	@yield('body')
+	
+	@yield('previous')
+	
+	@yield('next')
 
 	@section('footer')
 	@include('footer')
