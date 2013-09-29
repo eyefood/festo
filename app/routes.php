@@ -11,7 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', 'PageController@showPage');
+
+Route::get('/{year}/{month}/{day}', 'PageController@showPage')
+->where(array(
+	'year' => '(19|20)\d\d',
+	'month' => '\d\d',
+	'day' => '\d\d'
+));
