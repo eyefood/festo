@@ -1,0 +1,15 @@
+{
+    "require": {
+        "slim/slim": "2.*",
+        "slim/views": "0.1.*",
+        "twig/twig": "1.*",
+        "michelf/php-markdown": "1.4.*",
+        "michelf/php-smartypants": "1.6.0-beta1"
+    },
+
+    "autoload": {
+		"psr-0": {
+			"Festo\\": "lib/"
+		}
+	}
+}

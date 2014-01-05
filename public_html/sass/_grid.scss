@@ -1,0 +1,111 @@
+@mixin grid-base {
+	margin-right: 20px ;
+	float: left;
+	display: inline ;
+}
+
+.grid-1 {
+	@include grid-base ;
+	width:40px;
+}
+
+.grid-2 {
+	@include grid-base ;
+	width:100px;
+}
+
+.grid-3 {
+	@include grid-base ;
+	width:160px;
+}
+
+.grid-4 {
+	@include grid-base ;
+	width:220px;
+}
+
+.grid-5 {
+	@include grid-base ;
+	width:280px;
+}
+
+.grid-6 {
+	@include grid-base ;
+	width:340px;
+}
+
+.grid-7 {
+	@include grid-base ;
+	width:400px;
+}
+
+.grid-8 {
+	@include grid-base ;
+	width:460px;
+}
+
+.grid-9 {
+	@include grid-base ;
+	width:520px;
+}
+
+.grid-10 {
+	@include grid-base ;
+	width:580px;
+}
+
+.grid-11 {
+	@include grid-base ;
+	width:640px;
+}
+
+.grid-12 {
+	@include grid-base ;
+	width:700px;
+}
+
+.grid-13 {
+	@include grid-base ;
+	width:760px;
+}
+
+.grid-14 {
+	@include grid-base ;
+	width:820px;
+}
+
+.grid-15 {
+	@include grid-base ;
+	width:880px;
+}
+
+.grid-16 {
+	@include grid-base ;
+	width:940px;
+}
+
+.grid-17 {
+	@include grid-base ;
+	width:1000px;
+}
+
+.grid-18 {
+	@include grid-base ;
+	width:1060px;
+}
+
+.grid-8 {
+	.grid-4:nth-child(2n) { margin-right: 0 ; }
+	.grid-8 { margin-right: 0 ; }
+}
+
+.grid-12 {
+	.grid-12 { margin-right: 0 ; }
+	.grid-6:nth-child(2n) { margin-right: 0 ; }
+	.grid-4:nth-child(3n) { margin-right: 0 ; }
+	.grid-3:nth-child(4n) { margin-right: 0 ; }
+}
+
+.omega {
+	margin-right: 0 ;
+}

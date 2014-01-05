@@ -1,0 +1,86 @@
+@import "reset" ;
+@import "grid" ;
+
+body {
+	font-family: Georgia ;
+	background-color: #f9f9f9 ;
+	color: #111 ;
+}
+
+h1 {
+	margin-bottom: 1em ;
+	font-family: "Helvetica Neue", Helvetica, Arial ;
+	font-size: 1.5em ;
+
+	a {
+		color: #111 ;
+		text-decoration: none ;
+	}
+}
+
+h2 {
+	margin-bottom: 1em ;
+	margin-top: 3em ;
+	font-family: "Helvetica Neue", Helvetica, Arial ;
+	font-size: 1.5em ;
+
+	&:first-child {
+		margin-top: 0 ;
+	}
+}
+
+.container {
+	margin: 60px 0 0 40px ;
+}
+
+.posts {
+	margin-left: 40px ;
+	line-height: 27.5px ;
+	font-size: 18px ;
+
+	p {
+		margin-bottom: 1em ;
+		color: #333 ;
+
+		a {
+			color: #147 ;
+		}
+	}
+}
+
+.previous-days,
+.next-days {
+	ul {
+		font-family: "Helvetica Neue", Helvetica, Arial ;
+		font-size: 13px ;
+		line-height: 20px ;
+
+		ul > li {
+			margin-bottom: 1em ;
+		}
+
+		a {
+			color: #333 ;
+			text-decoration: none ;
+			font-weight: bold ;
+		}
+
+		li > ul > li {
+			color: #666 ;
+			margin-bottom: 0 ;
+			display: inline-block ;
+		}
+
+		ul li + li::before {
+		    content: "\00a0//\00a0";
+		}
+	}
+}
+
+.previous-days {
+	margin-left: 100px ;
+}
+
+.next-days {
+	margin-left: 40px ;
+}
