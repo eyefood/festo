@@ -2,7 +2,7 @@
 @import "grid" ;
 
 body {
-	font-family: Georgia ;
+	font-family: "PT Serif", Georgia ;
 	background-color: #f9f9f9 ;
 	color: #111 ;
 }
@@ -13,7 +13,7 @@ h1 {
 	font-size: 1.5em ;
 
 	a {
-		color: #111 ;
+		color: #b00 ;
 		text-decoration: none ;
 	}
 }
@@ -36,7 +36,7 @@ h2 {
 .posts {
 	margin-left: 40px ;
 	line-height: 27.5px ;
-	font-size: 18px ;
+	font-size: 16px ;
 
 	p {
 		margin-bottom: 1em ;
@@ -45,6 +45,10 @@ h2 {
 		a {
 			color: #147 ;
 		}
+	}
+
+	img {
+		max-width: 100% ;
 	}
 }
 
@@ -69,6 +73,15 @@ h2 {
 			color: #666 ;
 			margin-bottom: 0 ;
 			display: inline-block ;
+
+			a {
+				color: #666 ;
+				font-weight: normal ;
+
+				&:hover {
+					color: #000 ;
+				}
+			}
 		}
 
 		ul li + li::before {

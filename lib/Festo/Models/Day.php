@@ -50,15 +50,22 @@ class Day
 		if(!file_exists($filename)) {
 			throw new \Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
 		}
+		$raw = file_get_contents($filename) ;
+		$raw = mb_convert_encoding($raw, 'HTML-ENTITIES', "UTF-8");
 		$html =  SmartyPants::defaultTransform(
 			'<html><head></head><body>' . Markdown::defaultTransform(
-				file_get_contents($filename)
+				$raw
 			) . '</body></html>'
 		);
 		$dom = new DOMDocument() ;
 		@$dom->loadHTML($html) ;
+		$i = 1 ;
 		foreach($dom->getElementsByTagName('h1') as $node) {
-		    $this->titles[] = $node->textContent;
+		    $this->titles[] = array(
+		    	'text' => $node->textContent,
+		    	'slug' => $i . "-" . strtolower(str_replace(' ', '-', trim(preg_replace("/[^a-zA-Z0-9 ]/", "", strip_tags($node->textContent)))))
+		    );
+		    $i++ ;
 		}
 		return $this->titles ;
 	}
@@ -69,14 +76,17 @@ class Day
 		if(!file_exists($filename)) {
 			throw new Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
 		}
+		$raw = file_get_contents($filename) ;
+		$raw = mb_convert_encoding($raw, 'HTML-ENTITIES', "UTF-8");
 		$raw_html =  SmartyPants::defaultTransform(
 			Markdown::defaultTransform(
-				file_get_contents($filename)
+				$raw
 			)
 		);
 		$html = '<html><head></head><body>' . $raw_html . '</body></html>' ;
 		$dom = new DOMDocument() ;
 		@$dom->loadHTML($html) ;
+		$i = 1 ;
 		foreach($dom->getElementsByTagName('h1') as $node) {
 			$post = new Post ;
 		    $post->title = $node->textContent;
@@ -84,7 +94,9 @@ class Day
 		    while(($node = $node->nextSibling) && $node->nodeName !== 'h1') {
 		        $post->body .= $dom->saveHtml($node);
 		    }
+		    $post->slug = $i . "-" . strtolower(str_replace(' ', '-', trim(preg_replace("/[^a-zA-Z0-9 ]/", "", strip_tags($post->title))))) ;
 		    $this->posts[] = $post ;
+		    $i++ ;
 		}
 		if(empty($this->posts))
 		{

@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>{{date|date("l jS F, Y")}}</title>
+	<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/css/festo.css" type="text/css" media="screen"  />
 </head>
 <body>
@@ -13,8 +14,8 @@
 
 		<article class="posts grid-11">
 			{% for post in posts %}
-				<h2>{{ post.title }}</h2>
-				{{ post.body|raw }}
+				<h2>{{ post.title }}</h2><a name="{{ post.slug }}">
+				{{ post.body|raw }}<p></p>
 			{% endfor %}
 		</div>
 		<div class="previous-days grid-3">
@@ -24,7 +25,7 @@
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
 					<ul>
 						{% for title in day.titles %}
-						<li>{{ title }}</li>
+						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a></li>
 						{% endfor %}
 					</ul>
 				</li>
@@ -39,7 +40,7 @@
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
 					<ul>
 						{% for title in day.titles %}
-						<li>{{ title }}</li>
+						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a></li>
 						{% endfor %}
 					</ul>
 				</li>
