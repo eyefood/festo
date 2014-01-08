@@ -63,8 +63,13 @@ class Day
 		@$dom->loadHTML($html) ;
 		$i = 1 ;
 		foreach($dom->getElementsByTagName('h1') as $node) {
+			$text = $node->textContent ;
+			$length = 40 ;
+			if(strlen($text) > $length) {
+		      $text = preg_replace("/^(.{1,$length})(\s.*|$)/s", '\\1...', $text);
+		   }
 		    $this->titles[] = array(
-		    	'text' => substr($node->textContent, 0, 40),
+		    	'text' => $text,
 		    	'slug' => $i . "-" . strtolower(str_replace(' ', '-', trim(preg_replace("/[^a-zA-Z0-9 ]/", "", strip_tags($node->textContent)))))
 		    );
 		    $i++ ;
@@ -144,7 +149,7 @@ class Day
 		{
 			$days[] = new Day($date) ;
 		}
-		return array_reverse($days) ;
+		return $days ;
 	}
 
 	public function extractComments()

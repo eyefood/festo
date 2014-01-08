@@ -10,22 +10,24 @@
 	<div class="container">
 		<div class="header grid-2">
 			<h1><a href="/">’festo</a></h1>
+			<h3>by <a href="http://twitter.com/Kisa">@Kisa</a></h3>
 		</div>
 
 		<article class="posts grid-11">
 			{% for post in posts %}
-				<h2><a name="{{ post.slug }}">{{ post.title }}</a></h2>
+				<a name="{{ post.slug }}">
+				<h2>{{ post.title }}</a></h2>
 				{{ post.body|raw }}<p></p>
 			{% endfor %}
 		</div>
 		<div class="previous-days grid-3">
-			<h2>&larr;</h2>
+			<h2>◀</h2>
 			<ul>
 				{% for day in previous_days %}
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
 					<ul>
 						{% for title in day.titles %}
-						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a></li>
+						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a> </li>
 						{% endfor %}
 					</ul>
 				</li>
@@ -34,13 +36,13 @@
 		</div>
 
 		<div class="next-days grid-3">
-			<h2>&rarr;</h2>
+			<h2>▶</h2>
 			<ul>
 				{% for day in next_days %}
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
 					<ul>
 						{% for title in day.titles %}
-						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a></li>
+						<li><a href="{{day.date|date("/Y/m/d")}}#{{title.slug}}">{{ title.text }}</a> </li>
 						{% endfor %}
 					</ul>
 				</li>
