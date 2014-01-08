@@ -11,7 +11,9 @@ class Day
 {
 	public	$date,
 			$titles,
-			$posts = array()
+			$posts = array(),
+			$comments = array(),
+			$raw_text
 			;
 
 
@@ -22,8 +24,15 @@ class Day
 			$date = time() ;
 		}
 		$this->setDate($date) ;
+
+		$filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
+		if(!file_exists($filename)) {
+			throw new \Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
+		}
+		$this->raw_text = file_get_contents($filename) ;
 		$this->getTitles() ;
 	}
+
 	/**
 	 * [description here]
 	 *
@@ -45,16 +54,9 @@ class Day
 	}
 
 	public function getTitles() {
-		$count = 0 ;
-		$filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
-		if(!file_exists($filename)) {
-			throw new \Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
-		}
-		$raw = file_get_contents($filename) ;
-		$raw = mb_convert_encoding($raw, 'HTML-ENTITIES', "UTF-8");
 		$html =  SmartyPants::defaultTransform(
 			'<html><head></head><body>' . Markdown::defaultTransform(
-				$raw
+				mb_convert_encoding($this->raw_text, 'HTML-ENTITIES', "UTF-8")
 			) . '</body></html>'
 		);
 		$dom = new DOMDocument() ;
@@ -62,7 +64,7 @@ class Day
 		$i = 1 ;
 		foreach($dom->getElementsByTagName('h1') as $node) {
 		    $this->titles[] = array(
-		    	'text' => $node->textContent,
+		    	'text' => substr($node->textContent, 0, 40),
 		    	'slug' => $i . "-" . strtolower(str_replace(' ', '-', trim(preg_replace("/[^a-zA-Z0-9 ]/", "", strip_tags($node->textContent)))))
 		    );
 		    $i++ ;
@@ -71,16 +73,10 @@ class Day
 	}
 
 	public function getPosts() {
-		$count = 0 ;
-		$filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
-		if(!file_exists($filename)) {
-			throw new Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
-		}
-		$raw = file_get_contents($filename) ;
-		$raw = mb_convert_encoding($raw, 'HTML-ENTITIES', "UTF-8");
+		$this->extractComments() ;
 		$raw_html =  SmartyPants::defaultTransform(
 			Markdown::defaultTransform(
-				$raw
+				mb_convert_encoding($this->raw_text, 'HTML-ENTITIES', "UTF-8")
 			)
 		);
 		$html = '<html><head></head><body>' . $raw_html . '</body></html>' ;
@@ -149,5 +145,57 @@ class Day
 			$days[] = new Day($date) ;
 		}
 		return array_reverse($days) ;
+	}
+
+	public function extractComments()
+	{
+		preg_match_all ("/<!-- -----BEGIN COMMENT v2.0----- -->([^<][^!]*)<!-- ------END COMMENT v2.0------ -->/s" , $this->raw_text, $comment_source) ;
+		$lr = "right" ;
+		$prev_commenter = "foo" ;
+		for ($i=0; $i < count($comment_source[0]); $i++)
+		{
+			$comment = explode("|", $comment_source[1][$i]) ;
+			$this->comments[] = $comment ;
+			if ($comment[1] !="")
+			{
+				if (substr($comment[1], 0, 7) != "http://")
+				{
+					$comment[1] = "http://" . $comment[1] ;
+				}
+				$comment_url = '<a href="' . $comment[1] . '">' ;
+				$comment_url_close = "</a>" ;
+			} else {
+				$comment_url = "" ;
+				$comment_url_close = "" ;
+			}
+			$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=" . md5($comment[2]) . "&amp;default=".urlencode('http://cagd.co.uk/avatar/default.jpg') ;
+			if (($lr == "left") && (md5($comment[0]) != $prev_commenter))
+			{
+				$lr = "right" ;
+			} elseif (($lr == "right") && (md5($comment[0]) != $prev_commenter)) {
+			 	$lr = "left" ;
+			}
+			$prev_commenter = md5($comment[0]) ;
+
+			$para_pattern = "/^<\/p>/" ;
+			$comment_body = Markdown::defaultTransform(preg_replace($para_pattern, "", $comment[3])) ;
+			$comment_body = str_replace( "<p><blockquote>", "<blockquote>\n  <p>", $comment_body) ;
+			$comment_body = preg_replace( "/<p>[\s]*<p>/s", "<p>" , $comment_body) ;
+			$comment_body = preg_replace( "/<\/p>[\s]*<\/p>/s", "</p>" , $comment_body) ;
+			$comment_body = preg_replace( "/<p><p>/s", "<p>" , $comment_body) ;
+			$comment_body = preg_replace( "/<p><\/p>/", "" , $comment_body) ;
+			$comment_body = preg_replace( "/<\/p><\/p>/s", "</p>" , $comment_body) ;
+			$comment_body = str_replace( "</blockquote></p>", "</p>\n</blockquote>", $comment_body) ;
+
+			if(!isset($comment[4])) { $comment[4] = "old-code" ; }
+
+			$pattern = $comment_source[0][$i] ;
+			$replace = "\n\n<a name=\"" . substr($comment[4], 0, -1)."\"></a>
+							<div class=\"comment-v2-" . $lr . "\">
+								<img class=\"avatar\" src=\"" . $grav_url . "\" />
+								<span> <p class=\"name\">" . $comment_url . $comment[0] . $comment_url_close . "</p>" . $comment_body . "</span>
+							</div>\n\n" ;
+			$this->raw_text = str_replace($pattern, $replace , $this->raw_text) ;
+		}
 	}
 }
