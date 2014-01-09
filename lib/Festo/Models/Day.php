@@ -27,7 +27,16 @@ class Day
 
 		$filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
 		if(!file_exists($filename)) {
-			throw new \Exception(date('Y/m/d\.\m\d', $this->getDate()) . ' not found') ;
+			$directory = new \RecursiveDirectoryIterator( SOURCE_DIRECTORY );
+			$iterator = new \RecursiveIteratorIterator($directory);
+			$regex = new \RegexIterator($iterator, '/^.+\/([0-9]{4})\/([0-9]{2})\/([0-9]{2})\.md$/i', \RecursiveRegexIterator::GET_MATCH);
+			$days = array() ;
+			$timestamps = array() ;
+			foreach($regex as $file)
+			{
+				$timestamps[] = strtotime($file[1] . '-' . $file[2] . '-' . $file[3]) ;
+			}
+			$this->setDate(end($timestamps)) ;
 		}
 		$this->raw_text = file_get_contents($filename) ;
 		$this->getTitles() ;
@@ -122,7 +131,6 @@ class Day
 		}
 
 		$position = array_search($this->getDate(), $timestamps) ;
-
 		foreach(array_slice($timestamps, ($position - $per_page), $per_page, true) as $date)
 		{
 			$days[] = new Day($date) ;
@@ -144,10 +152,12 @@ class Day
 		}
 
 		$position = array_search($this->getDate(), $timestamps) ;
-
-		foreach(array_slice($timestamps, ($position + 1), $per_page, true) as $date)
+		if($position)
 		{
-			$days[] = new Day($date) ;
+			foreach(array_slice($timestamps, ($position + 1), $per_page, true) as $date)
+			{
+				$days[] = new Day($date) ;
+			}
 		}
 		return $days ;
 	}

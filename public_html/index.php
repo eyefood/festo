@@ -21,12 +21,7 @@ $app = new \Slim\Slim(array(
 $app->get('/', function () use ($app) {
 	try {
 		$day_controller = new Festo\Controllers\DayController(time()) ;
-			return $app->render('day.html', array(
-			'date' => $day_controller->date,
-			'posts' => $day_controller->getPosts(),
-			'previous_days' => $day_controller->getPreviousDays(10),
-			'next_days' => $day_controller->getNextDays(10)
-		)) ;
+
 	} catch (Exception $e) {
 		$directory = new \RecursiveDirectoryIterator( SOURCE_DIRECTORY );
 		$iterator = new \RecursiveIteratorIterator($directory);
@@ -38,13 +33,13 @@ $app->get('/', function () use ($app) {
 			$timestamps[] = strtotime($file[1] . '-' . $file[2] . '-' . $file[3]) ;
 		}
 		$day_controller = new Festo\Controllers\DayController(end($timestamps)) ;
-			return $app->render('day.html', array(
+	}
+	return $app->render('day.html', array(
 			'date' => $day_controller->date,
 			'posts' => $day_controller->getPosts(),
 			'previous_days' => $day_controller->getPreviousDays(10),
 			'next_days' => $day_controller->getNextDays(10)
 		)) ;
-	}
 
 });
 
