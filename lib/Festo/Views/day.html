@@ -34,6 +34,24 @@
 				<h2>{{ post.title }}</a></h2>
 				{{ post.body|raw }}<p></p>
 			{% endfor %}
+			{% if user %}
+			<a name="comment_form"> </a>
+			<form method="post">
+				<div class="comment-v2-left">
+					<img class="avatar" src="{{ user.avatar }}" />
+					<div class="comment-inner">
+						<p class="name"><a href="http://twitter.com/{{ user.screen_name }}">{{ user.name }}</a> <a class="logout" href="/logout">(Logout)</a></p>
+						<textarea name="comment"></textarea>
+						<input type="hidden" name="duplicate_id" value="{{ random() }}" />
+						<input type="submit" />
+					</div>
+				</div>
+			</form>
+			{% else %}
+			<!-- login link -->
+			<a href="/twitter_auth.php"><img src="/images/sign-in-with-twitter-gray.png" alt="Sign in with Twitter" /></a>
+			{% endif %}
+			<a name="end"> </a>
 		</div>
 
 		<div class="next-days grid-3">

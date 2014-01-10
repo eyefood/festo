@@ -4,7 +4,8 @@
         "slim/views": "0.1.*",
         "twig/twig": "1.*",
         "michelf/php-markdown": "1.4.*",
-        "michelf/php-smartypants": "1.6.0-beta1"
+        "michelf/php-smartypants": "1.6.0-beta1",
+        "kertz/twitteroauth": "dev-master"
     },
 
     "autoload": {

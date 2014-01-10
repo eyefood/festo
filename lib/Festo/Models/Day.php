@@ -4,6 +4,7 @@ namespace Festo\Models ;
 use \DOMDocument,
 	\DOMXPath,
 	\Michelf\Markdown,
+	\Michelf\MarkdownExtra,
 	\Michelf\SmartyPants
 	;
 
@@ -13,7 +14,8 @@ class Day
 			$titles,
 			$posts = array(),
 			$comments = array(),
-			$raw_text
+			$raw_text,
+			$filename
 			;
 
 
@@ -25,8 +27,8 @@ class Day
 		}
 		$this->setDate($date) ;
 
-		$filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
-		if(!file_exists($filename)) {
+		$this->filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
+		if(!file_exists($this->filename)) {
 			$directory = new \RecursiveDirectoryIterator( SOURCE_DIRECTORY );
 			$iterator = new \RecursiveIteratorIterator($directory);
 			$regex = new \RegexIterator($iterator, '/^.+\/([0-9]{4})\/([0-9]{2})\/([0-9]{2})\.md$/i', \RecursiveRegexIterator::GET_MATCH);
@@ -37,8 +39,9 @@ class Day
 				$timestamps[] = strtotime($file[1] . '-' . $file[2] . '-' . $file[3]) ;
 			}
 			$this->setDate(end($timestamps)) ;
+			$this->filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
 		}
-		$this->raw_text = file_get_contents($filename) ;
+		$this->raw_text = file_get_contents($this->filename) ;
 		$this->getTitles() ;
 	}
 
@@ -184,6 +187,7 @@ class Day
 				$comment_url_close = "" ;
 			}
 			$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=" . md5($comment[2]) . "&amp;default=".urlencode('http://cagd.co.uk/avatar/default.jpg') ;
+			$grav_url = $comment[2] ;
 			if (($lr == "left") && (md5($comment[0]) != $prev_commenter))
 			{
 				$lr = "right" ;
@@ -193,24 +197,45 @@ class Day
 			$prev_commenter = md5($comment[0]) ;
 
 			$para_pattern = "/^<\/p>/" ;
-			$comment_body = Markdown::defaultTransform(preg_replace($para_pattern, "", $comment[3])) ;
+			$comment_body = $comment[3] ;
+			$comment_body = MarkdownExtra::defaultTransform(preg_replace($para_pattern, "", $comment_body)) ;
 			$comment_body = str_replace( "<p><blockquote>", "<blockquote>\n  <p>", $comment_body) ;
 			$comment_body = preg_replace( "/<p>[\s]*<p>/s", "<p>" , $comment_body) ;
 			$comment_body = preg_replace( "/<\/p>[\s]*<\/p>/s", "</p>" , $comment_body) ;
 			$comment_body = preg_replace( "/<p><p>/s", "<p>" , $comment_body) ;
-			$comment_body = preg_replace( "/<p><\/p>/", "" , $comment_body) ;
 			$comment_body = preg_replace( "/<\/p><\/p>/s", "</p>" , $comment_body) ;
 			$comment_body = str_replace( "</blockquote></p>", "</p>\n</blockquote>", $comment_body) ;
 
-			if(!isset($comment[4])) { $comment[4] = "old-code" ; }
+			if(!isset($comment[4])) { $comment[4] = "old-code-" ; }
 
 			$pattern = $comment_source[0][$i] ;
 			$replace = "\n\n<a name=\"" . substr($comment[4], 0, -1)."\"></a>
 							<div class=\"comment-v2-" . $lr . "\">
-								<img class=\"avatar\" src=\"" . $grav_url . "\" />
+								" . $comment_url . "<img class=\"avatar\" src=\"" . $grav_url . "\" />" . $comment_url_close . "
 								<span> <p class=\"name\">" . $comment_url . $comment[0] . $comment_url_close . "</p>" . $comment_body . "</span>
 							</div>\n\n" ;
 			$this->raw_text = str_replace($pattern, $replace , $this->raw_text) ;
+		}
+	}
+
+	public function addComment($user, $comment, $duplicate_id)
+	{
+		if (!preg_match("/{$duplicate_id}/", $this->raw_text) && !empty($comment))
+		{
+			$handle = fopen($this->filename, 'a+') ;
+
+			$new_name = $user['name'] ;
+			$new_url = 'http://twitter.com/' . $user['screen_name'] ;
+			$new_img = $user['avatar'] ;
+
+			$new_text = str_replace("!", "&#33;", $comment) ;
+			$new_text = str_replace("|", "&#124;", $new_text)."\n\n" ;
+
+			$formatted_comment = "\n\n</p>\n<!-- -----BEGIN COMMENT v2.0----- -->\n"
+			. $new_name . "|" . $new_url . "|" . $new_img . "|" . $new_text . "|" . $duplicate_id
+			. "\n<!-- ------END COMMENT v2.0------ -->" ;
+
+			fwrite($handle, $formatted_comment . "\n\n\n");
 		}
 	}
 }

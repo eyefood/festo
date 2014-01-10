@@ -53,4 +53,8 @@ class DayController extends Controller
 	public function getNextDays($per_page=7) {
 		return $this->_day->getNextDays($per_page) ;
 	}
+
+	public function addComment($user, $comment, $duplicate_id) {
+		return $this->_day->addComment($user, $comment, $duplicate_id) ;
+	}
 }
