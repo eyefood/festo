@@ -6,7 +6,10 @@ body {
 	font-family: "Georgia" ;
 	background-color: #f9f9f9 ;
 	color: #111 ;
-
+@media (max-width: 720px) {
+		margin-right: 40px ;
+		width: 100% ;
+	}
 }
 
 .header {
@@ -81,6 +84,16 @@ h2 {
 		line-hegith: 20px ;
 		color: #444 ;
 		margin-bottom: 2em ;
+	}
+	@media (max-width: 896px) {
+		margin-left: 0 ;
+		clear: left ;
+	}
+
+	@media (max-width: 720px) {
+
+		margin-right: 40px ;
+		width: 90% ;
 	}
 }
 
@@ -189,6 +202,11 @@ h2 {
 
 .previous-days,
 .next-days {
+
+	@media (max-width: 1094px) {
+		display: none ;
+	}
+
 	padding-bottom: 120px ;
 
 	h2 {
