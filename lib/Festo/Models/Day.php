@@ -21,10 +21,6 @@ class Day
 
 	public function __construct($date=null)
 	{
-		if(!$date)
-		{
-			$date = time() ;
-		}
 		$this->setDate($date) ;
 
 		$this->filename = SOURCE_DIRECTORY . date('Y/m/d\.\m\d', $this->getDate()) ;
@@ -96,6 +92,7 @@ class Day
 				mb_convert_encoding($this->raw_text, 'HTML-ENTITIES', "UTF-8")
 			)
 		);
+		$raw_html = preg_replace('/(^|\s)@([a-z0-9_]+)/i', '$1<a href="http://www.twitter.com/$2">@$2</a>', $raw_html);
 		$html = '<html><head></head><body>' . $raw_html . '</body></html>' ;
 		$dom = new DOMDocument() ;
 		@$dom->loadHTML($html) ;
@@ -188,7 +185,7 @@ class Day
 			}
 			$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=" . md5($comment[2]) . "&amp;default=".urlencode('http://cagd.co.uk/avatar/default.jpg') ;
 			$grav_url = $comment[2] ;
-			if (($lr == "left") && (md5($comment[0]) != $prev_commenter))
+			if (($lr == "left") && (md5($comment[0]) != $prev_commenter) && false )
 			{
 				$lr = "right" ;
 			} elseif (($lr == "right") && (md5($comment[0]) != $prev_commenter)) {
@@ -234,6 +231,11 @@ class Day
 			$formatted_comment = "\n\n</p>\n<!-- -----BEGIN COMMENT v2.0----- -->\n"
 			. $new_name . "|" . $new_url . "|" . $new_img . "|" . $new_text . "|" . $duplicate_id
 			. "\n<!-- ------END COMMENT v2.0------ -->" ;
+
+			if($user['id'] = 713663)
+			{
+				$formatted_comment = "\n\n" . $comment ;
+			}
 
 			fwrite($handle, $formatted_comment . "\n\n\n");
 		}

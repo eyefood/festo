@@ -1,12 +1,14 @@
 @import "reset" ;
 @import "grid" ;
 @import "fonts" ;
+@import "media-queries";
 
 body {
 	font-family: "Georgia" ;
 	background-color: #f9f9f9 ;
 	color: #111 ;
-@media (max-width: 720px) {
+
+	@include ipad {
 		margin-right: 40px ;
 		width: 100% ;
 	}
@@ -25,6 +27,31 @@ body {
 			}
 		}
 	}
+
+	h2 {
+		margin-top: 30px ;
+		margin-left: 8px ;
+
+		a {
+			border: 1px solid #ccc ;
+			border-radius: 3px ;
+			width: 30px ;
+			font-family: Arial ;
+			font-size: 12px ;
+			text-align: center ;
+			line-height: 12px ;
+			padding: 9px 0 ;
+			color: #666 ;
+			display: inline-block ;
+			text-decoration: none ;
+			margin-right: 8px ;
+
+			&:hover {
+				background-color: #dadada ;
+				color: #333 ;
+			}
+		}
+	}
 }
 
 h1 {
@@ -39,6 +66,14 @@ h1 {
 		&:hover {
 			color: #000 ;
 		}
+	}
+
+	.apostrophe {
+		font-family: Georgia;
+		margin-right: 2px ;
+		position: relative ;
+		top: 1px ;
+		color: #b00 ;
 	}
 }
 
@@ -55,6 +90,33 @@ h2 {
 
 .container {
 	margin: 0 0 0 40px ;
+
+
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 568px) {
+	.container {
+		width: 300px ;
+		margin: 0 0 0 20px ;
+	}
+
+	body, .header {
+		width: 300px ;
+		position: relative ;
+	}
+
+	.header {
+		left: -8px ;
+	}
+
+	.header h2 {
+		position: absolute ;
+		top: -15px ;
+		left: 208px ;
+		width: 80px ;
+	}
 }
 
 .posts {
@@ -64,6 +126,7 @@ h2 {
 	padding-bottom: 120px ;
 
 	p, blockquote {
+		word-wrap: break-word;
 		a {
 			color: #147 ;
 		}
@@ -72,6 +135,7 @@ h2 {
 	p {
 		margin-bottom: 30px ;
 		color: #444 ;
+
 	}
 
 	img {
@@ -85,27 +149,18 @@ h2 {
 		color: #444 ;
 		margin-bottom: 2em ;
 	}
-	@media (max-width: 896px) {
-		margin-left: 0 ;
-		clear: left ;
-	}
-
-	@media (max-width: 720px) {
-
-		margin-right: 40px ;
-		width: 90% ;
-	}
 }
 
 .comment-v2-left,
 .comment-v2-right {
 	position: relative ;
-	top: -10px ;
-	margin-top: 20px ;
+	top: 0px ;
+	margin-top: 30px ;
+	margin-bottom: 30px ;
 
 	img.avatar {
 		position: absolute ;
-		top: 0 ;
+		top: 5px ;
 		width: 45px ;
 		height: 45px ;
 	}
@@ -114,28 +169,28 @@ h2 {
 		box-sizing: border-box ;
 		display: inline-block ;
 		width: 575px ;
-		padding: 10px 20px 5px 20px ;
-		border-radius: 1px ;
+		padding: 0 0 0 0 ;
+		border-top: 0px solid #bbb ;
 
 		p {
 			margin-bottom: 15px ;
 			line-height: 30px ;
-			color: #262626 ;
+			color: #666 ;
 		}
 
 		p.name {
 			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif ;
 			font-weight: bold ;
-			font-size: 16px ;
+			font-size: 15px ;
 			margin-bottom: 0 ;
 
 			a {
 				text-decoration: none ;
-				color: #111 ;
+				color: #444 ;
 			}
 
 			a.logout {
-				color: #147 ;
+				color: #b00 ;
 				font-size: 13px ;
 			}
 		}
@@ -157,22 +212,6 @@ h2 {
 	img.avatar {
 		left: 0 ;
 	}
-
-	span, div.comment-inner {
-		background-color: #ddd ;
-
-		&:before {
-			content: '' ;
-			-webkit-transform: rotate(45deg);
-			background-color: #ddd ;
-			position: absolute ;
-			top: 10px ;
-			left: 58px ;
-			width: 20px ;
-			height: 20px ;
-			z-index: -1;
-		}
-	}
 }
 
 .comment-v2-right {
@@ -181,46 +220,30 @@ h2 {
 	img.avatar {
 		right: 0 ;
 	}
-
-	span {
-		background-color: #d2d2d2 ;
-
-		&:before {
-			content: '' ;
-			-webkit-transform: rotate(45deg);
-			background-color: #d2d2d2 ;
-			position: absolute ;
-			top: 10px ;
-			right: 0px ;
-			margin-right: 58px ;
-			width: 20px ;
-			height: 20px ;
-			z-index: -1;
-		}
-	}
 }
 
 .previous-days,
 .next-days {
 
-	@media (max-width: 1094px) {
+	@media only screen
+	and (min-device-width : 768px)
+	and (max-device-width : 1024px) {
+		display: none ;
+	}
+
+	@media only screen
+	and (min-device-width : 320px)
+	and (max-device-width : 568px) {
+		display: none ;
+	}
+
+	@media only screen
+	and (min-device-width : 320px)
+	and (max-device-width : 480px) {
 		display: none ;
 	}
 
 	padding-bottom: 120px ;
-
-	h2 {
-		border: 1px solid #ccc ;
-		border-radius: 3px ;
-		width: 30px ;
-		font-family: Arial ;
-		font-size: 12px ;
-		text-align: center ;
-		line-height: 12px ;
-		padding: 9px 0 ;
-		color: #999 ;
-		display: none ;
-	}
 
 	ul {
 		margin-top: 67px ;
@@ -275,7 +298,10 @@ h2 {
 }
 
 form {
+	margin-top: 60px ;
+
 	textarea {
+		box-sizing: border-box ;
 		border: none ;
 		background-color: transparent ;
 		background-image: url('/images/textarea-dotted-line.png') ;
@@ -289,22 +315,85 @@ form {
 		line-height: 30px ;
 		height: 120px ;
 		resize: none;
+		padding-bottom: 28px;
+		position: relative ;
+		top: -3px ;
 	}
 
 	input[type=submit] {
-		background-color: #147 ;
+		background-color: #444 ;
 		border: none ;
 		border-radius: 3px ;
 		color: #fff ;
 		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif ;
 		font-weight: bold ;
-		font-size: 16px ;
-		padding: 6px 20px 7px 20px ;
+		font-size: 15px ;
+		padding: 5px 20px 7px 20px ;
 		margin: 10px 0 15px 0 ;
 
 		&:hover {
 			background-color: #262626 ;
 			cursor: pointer ;
+		}
+	}
+}
+
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : portrait) {
+	.posts {
+		margin-left: 0 ;
+		clear: left ;
+	}
+	span, div.comment-inner {
+
+	}
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 568px) {
+
+	h1 {
+		margin-top: 15px ;
+	}
+
+	.posts {
+		margin-left: 0 ;
+		clear: left ;
+		margin-right: 40px ;
+		width: 90% ;
+	}
+
+	.comment-v2-left,
+	.comment-v2-right {
+		span, div.comment-inner {
+			width: 215px ;
+		}
+	}
+}
+
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+
+	h1 {
+		margin-top: 15px ;
+	}
+
+	.posts {
+		margin-left: 0 ;
+		clear: left ;
+		margin-right: 40px ;
+		width: 90% ;
+	}
+
+	.comment-v2-left,
+	.comment-v2-right {
+		span, div.comment-inner {
+			width: 215px ;
 		}
 	}
 }

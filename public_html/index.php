@@ -89,13 +89,19 @@ $app->get('/', 'auth', function () use ($app) {
 		}
 		$day_controller = new Festo\Controllers\DayController(end($timestamps)) ;
 	}
+	$next_days = $day_controller->getNextDays(10) ;
+	$next_day = (empty($next_days)) ? false : $next_days[0] ;
+	$previous_days = $day_controller->getPreviousDays(10) ;
+	$previous_day = (empty($previous_days)) ? false : $previous_days[0] ;
 	return $app->render('day.html', array(
-			'date' => $day_controller->date,
-			'posts' => $day_controller->getPosts(),
-			'previous_days' => $day_controller->getPreviousDays(10),
-			'next_days' => $day_controller->getNextDays(10),
-			'user' => $user
-		)) ;
+		'date' => $day_controller->getDate(),
+		'posts' => $day_controller->getPosts(),
+		'previous_days' => $previous_days,
+		'previous_day' => $previous_day,
+		'next_days' => $next_days,
+		'next_day' => $next_day,
+		'user' => $user
+	)) ;
 
 });
 
@@ -152,16 +158,20 @@ $app->get('/:year/:month/:day', 'auth', function ($year, $month, $day) use ($app
 	$date = strtotime($year . '-' . $month . '-' . $day) ;
 	try {
 		$day_controller = new Festo\Controllers\DayController($date) ;
-
 	} catch (Exception $e) {
 		$app->halt(404, 'Not Found');
 	}
-
+	$next_days = $day_controller->getNextDays(10) ;
+	$next_day = (empty($next_days)) ? false : $next_days[0] ;
+	$previous_days = $day_controller->getPreviousDays(10) ;
+	$previous_day = (empty($previous_days)) ? false : $previous_days[0] ;
 	return $app->render('day.html', array(
 		'date' => $day_controller->getDate(),
 		'posts' => $day_controller->getPosts(),
-		'previous_days' => $day_controller->getPreviousDays(10),
-		'next_days' => $day_controller->getNextDays(10),
+		'previous_days' => $previous_days,
+		'previous_day' => $previous_day,
+		'next_days' => $next_days,
+		'next_day' => $next_day,
 		'user' => $user
 	)) ;
 });
