@@ -232,7 +232,7 @@ class Day
 			. $new_name . "|" . $new_url . "|" . $new_img . "|" . $new_text . "|" . $duplicate_id
 			. "\n<!-- ------END COMMENT v2.0------ -->" ;
 
-			if($user['id'] = 713663)
+			if($user['id'] == 713663)
 			{
 				$formatted_comment = "\n\n" . $comment ;
 			}
