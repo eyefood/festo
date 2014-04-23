@@ -4,3 +4,4 @@ composer.phar
 composer.lock
 .DS_Store
 public/.sass-cache/*
+/public_html/tmp*

@@ -4,19 +4,17 @@
 	<meta charset="utf-8">
 	<meta name='viewport' content='width=device-width; initial-scale=1.0;' />
 	<title>{{date|date("l jS F, Y")}}</title>
-	<link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/css/festo.css" type="text/css" media="screen"  />
 	<script src="/js/keymaster.js"></script>
 </head>
 <body>
-	<div class="container">
-		<div class="header grid-2">
-			<h1><a href="/"><span class="apostrophe">’</span>festo</a></h1>
-			<h3>by <a href="http://twitter.com/Kisa">@Kisa</a></h3>
-			<h2>{% if previous_day %}<a href="{{previous_day.date|date("/Y/m/d")}}">◀</a>{% endif %}{% if next_day %}<a href="{{next_day.date|date("/Y/m/d")}}">▶</a>{% endif %}</h2>
-		</div>
+	<div class="header">
+		<a href="/"><img src="/images/stream.jpg" alt="stream" /></a>
+	</div>
 
-		<div class="previous-days grid-3">
+	<div class="container">
+
+		<div class="previous-days">
 			<ul>
 				{% for day in previous_days %}
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
@@ -30,7 +28,8 @@
 			</ul>
 		</div>
 
-		<article class="posts grid-11">
+		<article class="posts">
+			<p id="today">{{date|date("l jS F, Y")}}</p>
 			{% for post in posts %}
 				<a name="{{ post.slug }}">
 				<h2>{{ post.title }}</a></h2>
@@ -56,7 +55,7 @@
 			<a name="end"> </a>
 		</div>
 
-		<div class="next-days grid-3">
+		<div class="next-days">
 			<ul>
 				{% for day in next_days %}
 				<li><a href="{{day.date|date("/Y/m/d")}}">{{day.date|date("M j, Y")}}</a>
